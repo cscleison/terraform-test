@@ -35,11 +35,11 @@ jobs:
 
       - name: Terraform Validate
         id: validate
-        run: terraform -chdir=apps validate -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
+        run: terraform -chdir=apps validate -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
 
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=apps plan -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
+        run: terraform -chdir=apps plan -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
         continue-on-error: false
 # check the images exist
 # add a new tag to the image on approval
