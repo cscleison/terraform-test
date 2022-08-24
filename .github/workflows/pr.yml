@@ -21,7 +21,7 @@ jobs:
         id: images
         run: |
           JSON=$(`echo cat ./images.json`)
-          echo aaaaaa $JSON
+          echo ${{ fromJson($JSON).ui }} aaaaaaaaaaaa
           UI=`echo $(jq -r '.ui' <<< "$JSON")`
           echo "::set-output name=ui::$UI"
 
@@ -34,17 +34,14 @@ jobs:
         id: init
         run: terraform -chdir=apps init
 
-      - name: Terraform Validate
-        id: validate
-        run: |
-          echo ${{ steps.images.outputs.ui}}
-    # terraform -chdir=apps validate -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
+      # - name: Terraform Validate
+      #   id: validate
+      #   run: terraform -chdir=apps validate -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
 
-# - name: Terraform Plan
-#   id: plan
-#   run: terraform plan -no-color
-#   continue-on-error: false
-
+      # - name: Terraform Plan
+      #   id: plan
+      #   run: terraform -chdir=apps plan -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
+      #   continue-on-error: false
 # check the images exist
 # add a new tag to the image on approval
 # plan should post a comment with the plan
