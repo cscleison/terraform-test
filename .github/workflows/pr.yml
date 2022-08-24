@@ -14,6 +14,33 @@ jobs:
         id: fmt
         run: terraform -chdir=apps fmt -check
         continue-on-error: false
+
+      - name: Read image tag
+        run: |
+          IMAGES=`cat ./images.json`
+          UI=$( $IMAGES | jq '.ui' )
+          echo $UI the value of ui
+
+# - name: Configure AWS credentials
+#   uses: aws-actions/configure-aws-credentials@v1
+#   with:
+#     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#     aws-region: us-east-1
+
+# - name: Terraform Init
+#   id: init
+#   run: terraform init
+
+# - name: Terraform Validate
+#   id: validate
+#   run: terraform validate -no-color ar
+
+# - name: Terraform Plan
+#   id: plan
+#   run: terraform plan -no-color
+#   continue-on-error: false
+
 # check the images exist
 # add a new tag to the image on approval
 # plan should post a comment with the plan
