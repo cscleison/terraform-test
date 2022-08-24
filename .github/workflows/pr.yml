@@ -19,7 +19,7 @@ jobs:
         run: |
           IMAGES=`cat ./images.json`
           echo $IMAGES content
-          UI=$( $IMAGES | jq '.ui' )
+          UI=fromJson($IMAGES).version 
           echo $UI the value of ui
 
 # - name: Configure AWS credentials
