@@ -18,7 +18,7 @@ jobs:
       - name: Read images json
         id: read-json
         run: |
-          echo cat ./images.json | jq '.ui'
+          echo `cat ./images.json` | jq '.ui'
 
   # echo "::set-output name=images::cat ./images.json | jq '.ui'"
 
