@@ -2,10 +2,16 @@ name: Pull Request Workflow
 on:
   pull_request:
 
+env:
+  tf_actions_working_dir: ./apps
+
 jobs:
   validate:
     name: Validate Release Label
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v2
@@ -26,21 +32,59 @@ jobs:
 
       - name: Terraform fmt
         id: fmt
-        run: terraform -chdir=apps fmt -check
+        run: terraform fmt -check
         continue-on-error: false
 
       - name: Terraform Init
         id: init
-        run: terraform -chdir=apps init
+        run: terraform init
 
       - name: Terraform Validate
         id: validate
-        run: terraform -chdir=apps validate -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
+        run: terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
-        run: terraform -chdir=apps plan -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
-        continue-on-error: false
+        run: terraform plan -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
+        continue-on-error: true
+
+      - uses: actions/github-script@v6
+        # if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            <details><summary>Validation Output</summary>
+
+            \`\`\`\n
+            ${{ steps.validate.outputs.stdout }}
+            \`\`\`
+
+            </details>
+
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+              
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
 # check the images exist
 # add a new tag to the image on approval
 # plan should post a comment with the plan

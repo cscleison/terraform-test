@@ -13,5 +13,5 @@ variable "desired_count" {
 }
 
 variable "ecr_image" {
-  default = ""
+  type = string
 }
