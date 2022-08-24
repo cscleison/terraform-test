@@ -5,8 +5,7 @@ on:
 jobs:
   validate:
     name: Validate Release Label
-    # runs-on: ubuntu-20.04
-    runs-on: windows-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v2
@@ -25,29 +24,23 @@ jobs:
           $json = Get-Content images.json | ConvertFrom-Json
           echo "::set-output name=ui::$(echo $json.ui)"
 
-      - run: echo ${{ steps.images.outputs.ui}}
+      - name: Terraform fmt
+        id: fmt
+        run: terraform -chdir=apps fmt -check
+        continue-on-error: false
 
-        # JSON=$(`echo cat ./images.json`)
-        # UI=`echo $(jq -r '.ui' <<< "$JSON")`
-        # echo "::set-output name=ui::$UI"
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=apps init
 
-      # - name: Terraform fmt
-      #   id: fmt
-      #   run: terraform -chdir=apps fmt -check
-      #   continue-on-error: false
+      - name: Terraform Validate
+        id: validate
+        run: terraform -chdir=apps validate -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
 
-      # - name: Terraform Init
-      #   id: init
-      #   run: terraform -chdir=apps init
-
-      # - name: Terraform Validate
-      #   id: validate
-      #   run: terraform -chdir=apps validate -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
-
-      # - name: Terraform Plan
-      #   id: plan
-      #   run: terraform -chdir=apps plan -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
-      #   continue-on-error: false
+      - name: Terraform Plan
+        id: plan
+        run: terraform -chdir=apps plan -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
+        continue-on-error: false
 # check the images exist
 # add a new tag to the image on approval
 # plan should post a comment with the plan
