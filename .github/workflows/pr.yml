@@ -19,7 +19,10 @@ jobs:
 
       - name: Read images json
         id: images
-        run: echo "::set-output name=ui::$(`cat ./images.json` | jq '.ui')"
+        run: |
+          JSON=`cat ./images.json` | jq '.ui'
+          echo aaaaaa $JSON
+          echo "::set-output name=ui::$JSON"
 
       - name: Terraform fmt
         id: fmt
@@ -34,7 +37,7 @@ jobs:
         id: validate
         run: |
           echo ${{ steps.images.outputs.ui}}
-          terraform -chdir=apps validate -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
+    # terraform -chdir=apps validate -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
 
 # - name: Terraform Plan
 #   id: plan
