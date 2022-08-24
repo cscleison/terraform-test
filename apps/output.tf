@@ -1,3 +1,3 @@
-output "ecr_image" {
-  value = var.ecr_image
-}
+# output "ecr_image" {
+#   value = var.ecr_image
+# }
