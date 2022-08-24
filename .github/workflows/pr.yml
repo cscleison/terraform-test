@@ -18,6 +18,7 @@ jobs:
       - name: Read image tag
         run: |
           IMAGES=`cat ./images.json`
+          echo $IMAGES content
           UI=$( $IMAGES | jq '.ui' )
           echo $UI the value of ui
 
