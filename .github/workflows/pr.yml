@@ -22,6 +22,8 @@ jobs:
         shell: pwsh
         run: |
           $json = Get-Content images.json | ConvertFrom-Json
+          echo $json adfsdf
+          echo $json.[ui] 2323sadf
           echo "::set-output name=ui::$json.[ui]"
 
         # JSON=$(`echo cat ./images.json`)
