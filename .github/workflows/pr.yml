@@ -19,6 +19,7 @@ jobs:
 
       - name: Read images json
         id: images
+        shell: pwsh
         run: |
           $json = Get-Content images.json | ConvertFrom-Json
           echo $json
