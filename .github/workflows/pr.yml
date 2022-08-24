@@ -15,12 +15,13 @@ jobs:
         run: terraform -chdir=apps fmt -check
         continue-on-error: false
 
-      - name: Read image tag
+      - name: Read images json
+        id: read-json
+        run: echo "::set-output name=images::`cat ./images.json`"
+
+      - name: Read ui image
         run: |
-          JSON=`cat ./images.json`
-          echo "IMAGES=$JSON" >> $GITHUB_ENV
-          echo $JSON content
-          echo "${{ env.IMAGES }}" aaaaaa
+          echo "${{ fromJson(steps.read-json.outputs.images).version }}" aaaaaa
 
   # UI="${{ fromJson(env.IMAGES).version }}"
   # echo $UI the value of ui
