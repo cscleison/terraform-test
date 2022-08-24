@@ -7,7 +7,7 @@ resource "aws_cloudwatch_log_group" "log_group" {
 }
 
 resource "aws_ecs_task_definition" "task_definition" {
-  family = var.project_name
+family = var.project_name
   container_definitions = jsonencode(
     [{
       "name" : "site",
