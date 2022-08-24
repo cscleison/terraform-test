@@ -17,11 +17,13 @@ jobs:
 
       - name: Read image tag
         run: |
-          JSON=`cat ./images.json`
+          JSON=cat ./images.json
           echo "IMAGES=$JSON" >> $GITHUB_ENV
           echo $JSON content
-          UI='${{ fromJson(env.IMAGES).version }}' 
-          echo $UI the value of ui
+          echo "${{ env.IMAGES }}" aaaaaa
+
+  # UI="${{ fromJson(env.IMAGES).version }}"
+  # echo $UI the value of ui
 
 # - name: Configure AWS credentials
 #   uses: aws-actions/configure-aws-credentials@v1
