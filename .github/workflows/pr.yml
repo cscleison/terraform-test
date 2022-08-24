@@ -22,9 +22,10 @@ jobs:
         shell: pwsh
         run: |
           $json = Get-Content images.json | ConvertFrom-Json
-          echo $json adfsdf
-          echo $json.ui 2323sadf
+          echo $json.ui
           echo "::set-output name=ui::$json.ui"
+
+      - run: echo ${{ steps.images.outputs.ui}}
 
         # JSON=$(`echo cat ./images.json`)
         # UI=`echo $(jq -r '.ui' <<< "$JSON")`
@@ -47,7 +48,6 @@ jobs:
       #   id: plan
       #   run: terraform -chdir=apps plan -no-color -var="ecr_image='${{ steps.images.outputs.ui}}'"
       #   continue-on-error: false
-
 # check the images exist
 # add a new tag to the image on approval
 # plan should post a comment with the plan
