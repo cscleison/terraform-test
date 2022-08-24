@@ -17,12 +17,12 @@ jobs:
 
       - name: Read images json
         id: read-json
-        run: echo "::set-output name=images::`cat ./images.json`"
-
-      - name: Read ui image
-        id: ui
         run: |
-          echo ${{ steps.read-json.outputs.images }}
+        echo cat ./images.json | jq '.ui'
+  
+  # echo "::set-output name=images::cat ./images.json | jq '.ui'"
+
+   
 
   # echo ${{ fromJson(steps.read-json.outputs.images) }}
   # echo ${{ toJson(steps.read-json.outputs.images) }}
