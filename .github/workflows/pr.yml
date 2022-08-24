@@ -5,7 +5,7 @@ on:
 jobs:
   validate:
     name: Validate Release Label
-    runs-on: ubuntu-20.04
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v2
