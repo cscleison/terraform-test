@@ -20,8 +20,10 @@ jobs:
         run: echo "::set-output name=images::`cat ./images.json`"
 
       - name: Read ui image
+        id: ui
         run: |
-          echo "${{ fromJson(steps.read-json.outputs.images).ui }}" aaaaaa
+          echo "${{ fromJson(steps.read-json.outputs.images) }}"
+          echo "${{ toJson(steps.read-json.outputs.images) }}"
 
   # UI="${{ fromJson(env.IMAGES).version }}"
   # echo $UI the value of ui
