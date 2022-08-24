@@ -17,7 +17,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Read images json
+      - name: Read json
         id: images
         shell: pwsh
         run: |
@@ -25,7 +25,7 @@ jobs:
           echo $json.ui
           echo "::set-output name=ui::$json.ui"
 
-      - run: echo ${{ steps.images.outputs.ui}}
+      - run: echo "${{ steps.images.outputs.ui}}"
 
         # JSON=$(`echo cat ./images.json`)
         # UI=`echo $(jq -r '.ui' <<< "$JSON")`
