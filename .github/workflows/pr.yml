@@ -17,7 +17,7 @@ jobs:
 
       - name: Read image tag
         run: |
-          JSON=cat ./images.json
+          JSON=`cat ./images.json`
           echo "IMAGES=$JSON" >> $GITHUB_ENV
           echo $JSON content
           echo "${{ env.IMAGES }}" aaaaaa
