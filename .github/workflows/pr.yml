@@ -23,8 +23,9 @@ jobs:
         id: ui
         run: |
           echo ${{ steps.read-json.outputs.images }}
-          echo ${{ fromJson(steps.read-json.outputs.images) }}
-          echo ${{ toJson(steps.read-json.outputs.images) }}
+
+  # echo ${{ fromJson(steps.read-json.outputs.images) }}
+  # echo ${{ toJson(steps.read-json.outputs.images) }}
 
   # UI="${{ fromJson(env.IMAGES).version }}"
   # echo $UI the value of ui
