@@ -33,9 +33,9 @@ jobs:
         id: init
         run: terraform -chdir=apps init
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform -chdir=apps validate -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
+      # - name: Terraform Validate
+      #   id: validate
+      #   run: terraform -chdir=apps validate -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
 
       - name: Terraform Plan
         id: plan
