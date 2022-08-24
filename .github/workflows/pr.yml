@@ -20,7 +20,7 @@ jobs:
       - name: Read images json
         id: images
         run: |
-          JSON=`echo cat ./images.json`
+          JSON=$(`echo cat ./images.json`)
           echo aaaaaa $JSON
           UI=`echo $(jq -r '.ui' <<< "$JSON")`
           echo "::set-output name=ui::$UI"
