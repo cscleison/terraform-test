@@ -23,8 +23,8 @@ jobs:
         run: |
           $json = Get-Content images.json | ConvertFrom-Json
           echo $json adfsdf
-          echo $json.[ui] 2323sadf
-          echo "::set-output name=ui::$json.[ui]"
+        # echo $json.[ui] 2323sadf
+        # echo "::set-output name=ui::$json.[ui]"
 
         # JSON=$(`echo cat ./images.json`)
         # UI=`echo $(jq -r '.ui' <<< "$JSON")`
