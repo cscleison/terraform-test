@@ -17,9 +17,10 @@ jobs:
 
       - name: Read image tag
         run: |
-          IMAGES=`cat ./images.json`
-          echo $IMAGES content
-          UI='${{ fromJson($IMAGES).version }}' 
+          JSON=`cat ./images.json`
+          echo "IMAGES=$JSON" >> $GITHUB_ENV
+          echo $JSON content
+          UI='${{ fromJson(env.IMAGES).version }}' 
           echo $UI the value of ui
 
 # - name: Configure AWS credentials
