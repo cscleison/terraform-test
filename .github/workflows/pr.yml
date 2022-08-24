@@ -22,8 +22,7 @@ jobs:
         shell: pwsh
         run: |
           $json = Get-Content images.json | ConvertFrom-Json
-          echo $json.ui
-          echo "::set-output name=ui::$json.ui"
+          echo "::set-output name=ui::$(echo $json.ui)"
 
       - run: echo ${{ steps.images.outputs.ui}}
 
