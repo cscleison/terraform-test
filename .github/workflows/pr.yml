@@ -20,9 +20,10 @@ jobs:
       - name: Read images json
         id: images
         run: |
-          JSON=`echo cat ./images.json | jq '.ui'`
+          JSON=`echo cat ./images.json`
           echo aaaaaa $JSON
-          echo "::set-output name=ui::$JSON"
+          UI=`echo $(jq -r '.ui' <<< "$JSON")`
+          echo "::set-output name=ui::$UI"
 
       - name: Terraform fmt
         id: fmt
