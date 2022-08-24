@@ -1,0 +1,20 @@
+name: Pull Request Workflow
+on:
+  pull_request:
+
+jobs:
+  validate:
+    name: Validate Release Label
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform -chdir=apps fmt -check
+        continue-on-error: false
+# check the images exist
+# add a new tag to the image on approval
+# plan should post a comment with the plan
+# command "deploy and squash"
