@@ -10,3 +10,4 @@ jobs:
       - run: |
           echo ${{ github.event.issue }} issue
           echo ${{ github.event.issue.body }} body
+          echo ${{ github.event.issue.title }} title
