@@ -77,8 +77,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const pullRequest = context.payload.pull_request_review.pull_requests[0];
-            console.log(pullRequest);
+            // const pullRequest = context.payload.pull_request_review.pull_requests[0];
+            console.log(context.payload.pull_request_review);
 
       # const repository = context.repo
       # await github.rest.pulls.merge({
