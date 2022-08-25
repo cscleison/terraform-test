@@ -1,15 +1,88 @@
 name: Deployment workflow
 on:
-  issue_comment:
-    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+env:
+  tf_actions_working_dir: ./apps
 
 jobs:
   deploy-and-squash:
-    if: ${{ github.event.issue.pull_request }}
+    if: github.event.review.body == 'deploy and squash'
     name: Deploy and squash
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
     steps:
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v2
+
       - run: |
-          echo ${{ github.event.issue }} issue
-          echo ${{ github.event.issue.body }} body
-          echo ${{ github.event.issue.title }} title
+          echo ${{ github.event.review.body }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Read json
+        id: images
+        shell: pwsh
+        run: |
+          $json = Get-Content images.json | ConvertFrom-Json
+          echo "::set-output name=ui::$(echo $json.ui)"
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
+        continue-on-error: false
+
+      # - name: Terraform Plan
+      #   id: apply
+      #   run: terraform apply -auto-approve -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
+      #   continue-on-error: false
+
+      # - uses: actions/github-script@v6
+      #   env:
+      #     APPLY: "terraform\n${{ steps.apply.outputs.stdout }}"
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       #### Terraform Apply 🚀\`${{ steps.apply.outcome }}\`
+      #       <details><summary>Show Apply Output</summary>
+
+      #       \`\`\`\n
+      #       ${process.env.APPLY}
+      #       \`\`\`
+
+      #       </details>
+
+      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: output
+      #       })
+
+      - name: Squash pull request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const repository = context.repo;
+
+            await github.rest.pulls.merge({
+              owner: repository.owner,
+              repo: repository.repo,
+              merge_method: "squash",
+              pull_number: prNumber,
+            })
