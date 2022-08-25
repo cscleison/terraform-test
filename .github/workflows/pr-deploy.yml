@@ -7,23 +7,8 @@ env:
   tf_actions_working_dir: ./apps
 
 jobs:
-  magic-word:
-    if: github.event.review.body == 'deploy and squash'
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Check command
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: "What's the magic word???"
-            })
-
   deploy-and-squash:
-    if: github.event.review.body == 'please deploy and squash'
+    if: github.event.review.body == 'deploy and squash'
     name: Deploy and squash
     runs-on: ubuntu-20.04
     defaults:
