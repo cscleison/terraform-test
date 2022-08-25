@@ -1,5 +1,7 @@
 name: Deployment workflow
-on: issue_comment
+on:
+  issue_comment:
+    types: [created]
 
 jobs:
   deploy-and-squash:
