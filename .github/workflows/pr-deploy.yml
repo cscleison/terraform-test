@@ -7,8 +7,23 @@ env:
   tf_actions_working_dir: ./apps
 
 jobs:
-  deploy-and-squash:
+  magic-word:
     if: github.event.review.body == 'deploy and squash'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check command
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "What's the magic word???"
+            })
+
+  deploy-and-squash:
+    if: github.event.review.body == 'please deploy and squash'
     name: Deploy and squash
     runs-on: ubuntu-20.04
     defaults:
@@ -44,34 +59,34 @@ jobs:
         run: terraform plan -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
         continue-on-error: false
 
-      # - name: Terraform Plan
-      #   id: apply
-      #   run: terraform apply -auto-approve -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
-      #   continue-on-error: false
+      - name: Terraform Plan
+        id: apply
+        run: terraform apply -auto-approve -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
+        continue-on-error: false
 
-      # - uses: actions/github-script@v6
-      #   env:
-      #     APPLY: "terraform\n${{ steps.apply.outputs.stdout }}"
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     script: |
-      #       #### Terraform Apply 🚀\`${{ steps.apply.outcome }}\`
-      #       <details><summary>Show Apply Output</summary>
+      - uses: actions/github-script@v6
+        env:
+          APPLY: "terraform\n${{ steps.apply.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Apply 🚀\`${{ steps.apply.outcome }}\`
+            <details><summary>Show Apply Output</summary>
 
-      #       \`\`\`\n
-      #       ${process.env.APPLY}
-      #       \`\`\`
+            \`\`\`\n
+            ${process.env.APPLY}
+            \`\`\`
 
-      #       </details>
+            </details>
 
-      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
-      #       github.rest.issues.createComment({
-      #         issue_number: context.issue.number,
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         body: output
-      #       })
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
       - name: Squash pull request
         uses: actions/github-script@v6
