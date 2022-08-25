@@ -13,5 +13,5 @@ variable "desired_count" {
 }
 
 variable "ecr_image" {
-  default = "public.ecr.aws/u6u0a7r2/node-test:ui-2b74467"
+  type = string
 }
