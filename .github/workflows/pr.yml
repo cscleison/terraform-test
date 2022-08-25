@@ -7,6 +7,7 @@ env:
 
 jobs:
   validate:
+    if: false
     name: Validate Release Label
     runs-on: ubuntu-20.04
     defaults:

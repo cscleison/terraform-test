@@ -1,0 +1,12 @@
+name: Deployment workflow
+on: issue_comment
+
+jobs:
+  deploy-and-squash:
+    if: ${{ github.event.issue.pull_request }}
+    name: Deploy and squash
+    runs-on: ubuntu-20.04
+    steps:
+      - run: |
+          echo ${{ github.event.issue }} issue
+          echo ${{ github.event.issue.body }} body
