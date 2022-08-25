@@ -77,13 +77,12 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            // const pullRequest = context.payload.pull_request_review.pull_requests[0];
-            console.log(context);
+            const prNumber = context.payload.pull_request.number;
+            const repository = context.repo;
 
-      # const repository = context.repo
-      # await github.rest.pulls.merge({
-      #   merge_method: "squash",
-      #   owner: repository.owner,
-      #   pull_number: pullRequest.number,
-      #   repo: repository.repo,
-      # })
+            await github.rest.pulls.merge({
+              owner: repository.owner,
+              repo: repository.repo,
+              merge_method: "squash",
+              pull_number: prNumber,
+            })
