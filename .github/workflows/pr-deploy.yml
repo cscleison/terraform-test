@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - run: |
-          echo ${{ github.event.issue }} issue
+          echo ${{ github.event.issue }} issuea
           echo ${{ github.event.issue.body }} body
           echo ${{ github.event.issue.title }} title
