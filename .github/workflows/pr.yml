@@ -8,7 +8,7 @@ env:
 jobs:
   validate:
     if: false
-    name: Validate Release Label
+    name: Validate
     runs-on: ubuntu-20.04
     defaults:
       run:

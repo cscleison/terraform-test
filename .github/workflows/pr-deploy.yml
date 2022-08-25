@@ -8,7 +8,7 @@ env:
 
 jobs:
   deploy-and-squash:
-    if: github.event.review.state == 'approved'
+    # if: github.event.review.state == 'approved'
     name: Deploy and squash
     runs-on: ubuntu-20.04
     defaults:
@@ -17,6 +17,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: hashicorp/setup-terraform@v2
+
+      - run: |
+          echo ${{ github.event.review.body }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
