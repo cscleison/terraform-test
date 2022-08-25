@@ -41,7 +41,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -refresh-only -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
+        run: terraform plan -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
         continue-on-error: false
 
       - name: Terraform Plan

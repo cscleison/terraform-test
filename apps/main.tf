@@ -1,4 +1,11 @@
 terraform {
+
+  backend "s3" {
+    bucket = "node-terraform"
+    key    = "node-infra"
+    region = "eu-west-1"
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -9,5 +16,5 @@ terraform {
 }
 
 provider "aws" {
-  region = "eu-west-1"
+  region     = "eu-west-1"
 }
