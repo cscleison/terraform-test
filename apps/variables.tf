@@ -1,6 +1,6 @@
 
 variable "project_name" {
-  default = "my-app-test"
+  default = "new-1"
 }
 
 variable "region" {
