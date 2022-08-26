@@ -1,6 +1,6 @@
 
 variable "project_name" {
-  default = "demo-1"
+  default = "with-s3-1"
 }
 
 variable "region" {

@@ -33,7 +33,7 @@ jobs:
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
-        continue-on-error: false
+        continue-on-error: true
 
       - name: Terraform Init
         id: init
@@ -42,14 +42,14 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+        continue-on-error: true
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -refresh-only -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
+        run: terraform plan -no-color -var="ecr_image=${{ steps.images.outputs.ui}}"
         continue-on-error: true
 
       - uses: actions/github-script@v6
-        # if: github.event_name == 'pull_request'
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
