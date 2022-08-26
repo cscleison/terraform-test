@@ -16,10 +16,10 @@ jobs:
         working-directory: ${{ env.tf_actions_working_dir }}
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: hashicorp/setup-terraform@v2   
+      - uses: actions/checkout@v2
+      - uses: hashicorp/setup-terraform@v2
 
-    - name: Terraform Destroy
+      - name: Terraform Destroy
         id: destroy
         run: terraform destroy -auto-approve -no-color
         continue-on-error: false
