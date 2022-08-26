@@ -1,4 +1,4 @@
-name: Deployment workflow
+name: PR commands
 on:
   pull_request_review:
     types: [submitted]
@@ -7,6 +7,23 @@ env:
   tf_actions_working_dir: ./apps
 
 jobs:
+  destroy:
+    if: github.event.review.body == 'destroy'
+    name: Destroy
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: hashicorp/setup-terraform@v2   
+
+    - name: Terraform Destroy
+        id: destroy
+        run: terraform destroy -auto-approve -no-color
+        continue-on-error: false
+
   deploy-and-squash:
     if: github.event.review.body == 'deploy and squash'
     name: Deploy and squash
