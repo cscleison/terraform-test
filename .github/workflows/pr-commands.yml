@@ -29,8 +29,15 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      - name: Read json
+        id: images
+        shell: pwsh
+        run: |
+          $json = Get-Content images.json | ConvertFrom-Json
+          echo "::set-output name=ui::$(echo $json.ui)"
+
       - name: Terraform Destroy
-        run: terraform destroy -auto-approve -no-color
+        run: terraform destroy -auto-approve -no-color  -var="ecr_image=${{ steps.images.outputs.ui}}"
         continue-on-error: false
 
   deploy-and-squash:
