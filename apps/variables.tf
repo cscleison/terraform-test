@@ -1,6 +1,6 @@
 
 variable "project_name" {
-  default = "with-s3"
+  default = "with-s3-1"
 }
 
 variable "region" {
