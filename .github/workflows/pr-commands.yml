@@ -7,6 +7,7 @@ env:
   tf_actions_working_dir: ./apps
 
 jobs:
+  # Before running destroy, the public inbound rule in the ACL has to be manually deleted in AWS
   destroy:
     if: github.event.review.body == 'destroy'
     name: Destroy
